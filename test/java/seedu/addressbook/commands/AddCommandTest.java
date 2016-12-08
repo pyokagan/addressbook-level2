@@ -1,20 +1,17 @@
-package seedu.addressbook.addCommand;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+package seedu.addressbook.commands;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import org.junit.Before;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 
-import seedu.addressbook.commands.AddCommand;
-import seedu.addressbook.commands.CommandResult;
 import seedu.addressbook.data.AddressBook;
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Address;
@@ -96,9 +93,9 @@ public class AddCommandTest {
 	private void ConstructingInvalidAddCmdThrows(String name, String phone, boolean isPhonePrivate, String email,
 			boolean isEmailPrivate, String address, boolean isAddressPrivate, Set<String> tags) {
 		try {
-			AddCommand cmd = new AddCommand(name, phone, isPhonePrivate, email, isEmailPrivate, address,
+			new AddCommand(name, phone, isPhonePrivate, email, isEmailPrivate, address,
 					isAddressPrivate, tags);
-			String errorFormatter = new String(
+			final String errorFormatter = new String(
 					"An add command was successfully constructed with invalid input: %s %s %s %s %s %s %s %s");
 			String error = String.format(errorFormatter, name, phone, isPhonePrivate, email, isEmailPrivate, address,
 					isAddressPrivate, tags);
