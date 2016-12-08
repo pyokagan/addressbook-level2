@@ -103,7 +103,8 @@ public class AddCommandTest {
 			String error = String.format(errorFormatter, name, phone, isPhonePrivate, email, isEmailPrivate, address,
 					isAddressPrivate, tags);
 			fail(error);
-		} catch (IllegalValueException e) {
+		} 
+		catch (IllegalValueException e) {
 		}
 	}
 
@@ -114,6 +115,7 @@ public class AddCommandTest {
 			AddCommand cmd = new AddCommand(Name.EXAMPLE, Phone.EXAMPLE, true, Email.EXAMPLE, false, Address.EXAMPLE,
 					true, tags);
 			ReadOnlyPerson p = cmd.getPerson();
+			
 			assertEquals(p.getName().fullName, Name.EXAMPLE);
 			assertEquals(p.getPhone().value, Phone.EXAMPLE);
 			assertTrue(p.getPhone().isPrivate());
@@ -123,7 +125,8 @@ public class AddCommandTest {
 			assertTrue(p.getAddress().isPrivate());
 			boolean isTagListEmpty = !p.getTags().iterator().hasNext();
 			assertTrue(isTagListEmpty);
-		} catch (IllegalValueException e) {
+		} 
+		catch (IllegalValueException e) {
 			fail("Adding command with valid data failed.");
 		}
 	}
@@ -136,6 +139,7 @@ public class AddCommandTest {
 		cmd.setData(book, LAST_SHOWN_LIST);
 		CommandResult res = cmd.execute();
 		UniquePersonList people = book.getAllPersons();
+		
 		assertTrue(people.contains(p));
 		assertTrue(countPeople(people) == 1);
 		assertFalse(res.getRelevantPersons().isPresent());
@@ -146,14 +150,18 @@ public class AddCommandTest {
 	public void addCommand_addressBookAlreadyContainsPerson_addressBookUnmodified() {
 		Person p = generateTestPerson();
 		AddressBook book = new AddressBook();
+		
 		try {
 			book.addPerson(p); // this should never throw
-		} catch (DuplicatePersonException e) {
+		} 
+		catch (DuplicatePersonException e) {
 			fail("There is a problem with address book's addPerson method.");
 		}
+		
 		AddCommand cmd = new AddCommand(p);
 		cmd.setData(book, LAST_SHOWN_LIST);
 		CommandResult res = cmd.execute();
+		
 		assertFalse(res.getRelevantPersons().isPresent());
 		assertEquals(res.feedbackToUser, AddCommand.MESSAGE_DUPLICATE_PERSON);
 		UniquePersonList people = book.getAllPersons();
@@ -165,7 +173,8 @@ public class AddCommandTest {
 		try {
 			return new Person(new Name(Name.EXAMPLE), new Phone(Phone.EXAMPLE, false), new Email(Email.EXAMPLE, true),
 					new Address(Address.EXAMPLE, false), new UniqueTagList());
-		} catch (IllegalValueException e) {
+		} 
+		catch (IllegalValueException e) {
 			fail("test person data should be valid by definition");
 			return null;
 		}
