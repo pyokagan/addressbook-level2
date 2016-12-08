@@ -31,7 +31,7 @@ public class AddCommandTest {
     @Test
     public void addCommand_invalidName_throws() {
         Set<String> tags = new HashSet<>();
-        final String[] invalidNames = { "", " ", "'", "[]\\[;]" };
+        final String[] invalidNames = { "", " ", "[]\\[;]" };
         for (String name : invalidNames) {
             assertConstructingInvalidAddCmdThrows(name, Phone.EXAMPLE, false, Email.EXAMPLE, false,
                     Address.EXAMPLE, false, tags);
