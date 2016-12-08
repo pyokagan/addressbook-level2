@@ -28,26 +28,8 @@ import seedu.addressbook.data.person.UniquePersonList.DuplicatePersonException;
 import seedu.addressbook.data.tag.UniqueTagList;
 
 public class AddCommandTest {
-	private AddressBook addressBook;
 	private static final List<? extends ReadOnlyPerson> LAST_SHOWN_LIST = Collections.emptyList();
-	private HashMap<String, String> valid;
-	private AddCommand addCmd;
-
-	@Before
-	public void setup() {
-		addressBook = new AddressBook();
-		valid = new HashMap<String, String>();
-
-	}
-
-	/**
-	 * Provides add command being tested the address book that it should use
-	 */
-	public void setAddressBook(AddressBook book) {
-		assert (addCmd != null);
-		addCmd.setData(book, LAST_SHOWN_LIST);
-	}
-
+	
 	/*
 	 * Note how the names of the test methods does not follow the normal naming
 	 * convention. That is because our coding standard allows a different naming
