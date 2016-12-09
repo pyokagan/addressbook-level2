@@ -14,6 +14,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import seedu.addressbook.data.AddressBook;
+import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Address;
 import seedu.addressbook.data.person.Email;
 import seedu.addressbook.data.person.Name;
@@ -77,7 +78,7 @@ public class AddCommandTest {
 
     /**
      * Asserts that attempting to construct an add command with the supplied
-     * invalid data throws an exception
+     * invalid data throws an IllegalValueException
      */
     private void assertConstructingInvalidAddCmdThrows(String name, String phone, boolean isPhonePrivate,
             String email, boolean isEmailPrivate, String address, boolean isAddressPrivate,
@@ -85,7 +86,7 @@ public class AddCommandTest {
         try {
             new AddCommand(name, phone, isPhonePrivate, email, isEmailPrivate, address, isAddressPrivate,
                     tags);
-        } catch (Exception e) {
+        } catch (IllegalValueException e) {
             return;
         }
         String error = String.format(
@@ -147,7 +148,7 @@ public class AddCommandTest {
         try {
             return new Person(new Name(Name.EXAMPLE), new Phone(Phone.EXAMPLE, false),
                     new Email(Email.EXAMPLE, true), new Address(Address.EXAMPLE, false), new UniqueTagList());
-        } catch (Exception e) {
+        } catch (IllegalValueException e) {
             fail("test person data should be valid by definition");
             return null;
         }
