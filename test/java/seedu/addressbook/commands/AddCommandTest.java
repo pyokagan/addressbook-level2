@@ -14,7 +14,6 @@ import java.util.Set;
 import org.junit.Test;
 
 import seedu.addressbook.data.AddressBook;
-import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Address;
 import seedu.addressbook.data.person.Email;
 import seedu.addressbook.data.person.Name;
@@ -22,7 +21,6 @@ import seedu.addressbook.data.person.Person;
 import seedu.addressbook.data.person.Phone;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.data.person.UniquePersonList;
-import seedu.addressbook.data.person.UniquePersonList.DuplicatePersonException;
 import seedu.addressbook.data.tag.UniqueTagList;
 
 public class AddCommandTest {
@@ -79,7 +77,7 @@ public class AddCommandTest {
 
     /**
      * Asserts that attempting to construct an add command with the supplied
-     * invalid data throws an IllegalValueException
+     * invalid data throws an exception
      */
     private void assertConstructingInvalidAddCmdThrows(String name, String phone, boolean isPhonePrivate,
             String email, boolean isEmailPrivate, String address, boolean isAddressPrivate,
@@ -87,7 +85,7 @@ public class AddCommandTest {
         try {
             new AddCommand(name, phone, isPhonePrivate, email, isEmailPrivate, address, isAddressPrivate,
                     tags);
-        } catch (IllegalValueException e) {
+        } catch (Exception e) {
             return;
         }
         String error = String.format(
@@ -97,7 +95,7 @@ public class AddCommandTest {
     }
 
     @Test
-    public void addCommand_validData_correctlyConstructed() throws IllegalValueException {
+    public void addCommand_validData_correctlyConstructed() throws Exception {
         Set<String> tags = new HashSet<>();
         AddCommand cmd = new AddCommand(Name.EXAMPLE, Phone.EXAMPLE, true, Email.EXAMPLE, false,
                 Address.EXAMPLE, true, tags); // should never throw
@@ -131,7 +129,7 @@ public class AddCommandTest {
 
     @Test
     public void addCommand_addressBookAlreadyContainsPerson_addressBookUnmodified()
-            throws DuplicatePersonException {
+            throws Exception {
         Person p = generateTestPerson();
         AddressBook book = new AddressBook();
         book.addPerson(p); // should never throw
@@ -150,7 +148,7 @@ public class AddCommandTest {
         try {
             return new Person(new Name(Name.EXAMPLE), new Phone(Phone.EXAMPLE, false),
                     new Email(Email.EXAMPLE, true), new Address(Address.EXAMPLE, false), new UniqueTagList());
-        } catch (IllegalValueException e) {
+        } catch (Exception e) {
             fail("test person data should be valid by definition");
             return null;
         }

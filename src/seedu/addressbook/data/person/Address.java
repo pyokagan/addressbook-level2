@@ -21,12 +21,12 @@ public class Address {
      * @throws IllegalValueException if given address string is invalid.
      */
     public Address(String address, boolean isPrivate) throws IllegalValueException {
-        String addr = address.trim();
+        String trimmedAddress = address.trim();
         this.isPrivate = isPrivate;
-        if (!isValidAddress(addr)) {
+        if (!isValidAddress(trimmedAddress)) {
             throw new IllegalValueException(MESSAGE_ADDRESS_CONSTRAINTS);
         }
-        this.value = addr;
+        this.value = trimmedAddress;
     }
 
     /**
