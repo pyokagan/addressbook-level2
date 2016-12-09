@@ -96,9 +96,8 @@ public class AddCommandTest {
 
     @Test
     public void addCommand_validData_correctlyConstructed() throws Exception {
-        Set<String> tags = new HashSet<>();
         AddCommand cmd = new AddCommand(Name.EXAMPLE, Phone.EXAMPLE, true, Email.EXAMPLE, false,
-                Address.EXAMPLE, true, tags); // should never throw
+                Address.EXAMPLE, true, NO_TAGS); // should never throw
         ReadOnlyPerson p = cmd.getPerson();
 
         assertEquals(Name.EXAMPLE, p.getName().fullName);
