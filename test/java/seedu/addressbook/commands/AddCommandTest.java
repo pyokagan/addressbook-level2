@@ -27,57 +27,56 @@ import seedu.addressbook.data.tag.UniqueTagList;
 
 public class AddCommandTest {
     private static final List<ReadOnlyPerson> LAST_SHOWN_LIST = Collections.emptyList();
-    
+    private static final Set<String> NO_TAGS = Collections.emptySet();
+
     @Test
     public void addCommand_invalidName_throws() {
-        Set<String> tags = new HashSet<>();
         final String[] invalidNames = { "", " ", "[]\\[;]" };
         for (String name : invalidNames) {
             assertConstructingInvalidAddCmdThrows(name, Phone.EXAMPLE, false, Email.EXAMPLE, false,
-                    Address.EXAMPLE, false, tags);
+                    Address.EXAMPLE, false, NO_TAGS);
         }
     }
-    
+
     @Test
     public void addCommand_invalidPhone_throws() {
-        Set<String> tags = new HashSet<>();
         final String[] invalidNumbers = { "", " ", "1234-5678", "[]\\[;]", "abc", "a123", "+651234" };
         for (String number : invalidNumbers) {
             assertConstructingInvalidAddCmdThrows(Name.EXAMPLE, number, false, Email.EXAMPLE, false,
-                    Address.EXAMPLE, false, tags);
+                    Address.EXAMPLE, false, NO_TAGS);
         }
     }
-    
+
     @Test
     public void addCommand_invalidEmail_throws() {
-        Set<String> tags = new HashSet<>();
-        final String[] invalidEmails = { "", " ", "def.com", "@", "@def", "@def.com", "abc@" };
+        final String[] invalidEmails = { "", " ", "def.com", "@", "@def", "@def.com", "abc@",
+                "@invalid@email", "invalid@email!", "!invalid@email" };
         for (String email : invalidEmails) {
             assertConstructingInvalidAddCmdThrows(Name.EXAMPLE, Phone.EXAMPLE, false, email, false,
-                    Address.EXAMPLE, false, tags);
+                    Address.EXAMPLE, false, NO_TAGS);
         }
     }
-    
+
     @Test
     public void addCommand_invalidAddress_throws() {
-        Set<String> tags = new HashSet<>();
         final String[] invalidAddresses = { "", " " };
         for (String address : invalidAddresses) {
             assertConstructingInvalidAddCmdThrows(Name.EXAMPLE, Phone.EXAMPLE, false, Email.EXAMPLE, false,
-                    address, false, tags);
+                    address, false, NO_TAGS);
         }
     }
-    
+
     @Test
     public void addCommand_invalidTags_throws() {
-        final String[][] invalidTags = { { "" }, { " " }, { "'" }, { "validTag", "" }, { "", " " } };
+        final String[][] invalidTags = { { "" }, { " " }, { "'" }, { "[]\\[;]" }, { "validTag", "" },
+                { "", " " } };
         for (String[] tags : invalidTags) {
             Set<String> tagsToAdd = new HashSet<>(Arrays.asList(tags));
             assertConstructingInvalidAddCmdThrows(Name.EXAMPLE, Phone.EXAMPLE, false, Email.EXAMPLE, false,
                     Address.EXAMPLE, false, tagsToAdd);
         }
     }
-    
+
     /**
      * Asserts that attempting to construct an add command with the supplied
      * invalid data throws an IllegalValueException
@@ -96,25 +95,25 @@ public class AddCommandTest {
                 name, phone, isPhonePrivate, email, isEmailPrivate, address, isAddressPrivate, tags);
         fail(error);
     }
-    
+
     @Test
     public void addCommand_validData_correctlyConstructed() throws IllegalValueException {
         Set<String> tags = new HashSet<>();
         AddCommand cmd = new AddCommand(Name.EXAMPLE, Phone.EXAMPLE, true, Email.EXAMPLE, false,
                 Address.EXAMPLE, true, tags); // should never throw
         ReadOnlyPerson p = cmd.getPerson();
-        
-        assertEquals(p.getName().fullName, Name.EXAMPLE);
-        assertEquals(p.getPhone().value, Phone.EXAMPLE);
+
+        assertEquals(Name.EXAMPLE, p.getName().fullName);
+        assertEquals(Phone.EXAMPLE, p.getPhone().value);
         assertTrue(p.getPhone().isPrivate());
-        assertEquals(p.getEmail().value, Email.EXAMPLE);
+        assertEquals(Email.EXAMPLE, p.getEmail().value);
         assertFalse(p.getEmail().isPrivate());
-        assertEquals(p.getAddress().value, Address.EXAMPLE);
+        assertEquals(Address.EXAMPLE, p.getAddress().value);
         assertTrue(p.getAddress().isPrivate());
         boolean isTagListEmpty = !p.getTags().iterator().hasNext();
         assertTrue(isTagListEmpty);
     }
-    
+
     @Test
     public void addCommand_emptyAddressBook_addressBookContainsPerson() {
         Person p = generateTestPerson();
@@ -123,13 +122,13 @@ public class AddCommandTest {
         cmd.setData(book, LAST_SHOWN_LIST);
         CommandResult res = cmd.execute();
         UniquePersonList people = book.getAllPersons();
-        
+
         assertTrue(people.contains(p));
-        assertEquals(people.immutableListView().size(), 1);
+        assertEquals(1, people.immutableListView().size());
         assertFalse(res.getRelevantPersons().isPresent());
-        assertEquals(res.feedbackToUser, String.format(AddCommand.MESSAGE_SUCCESS, p));
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, p), res.feedbackToUser);
     }
-    
+
     @Test
     public void addCommand_addressBookAlreadyContainsPerson_addressBookUnmodified()
             throws DuplicatePersonException {
@@ -139,14 +138,14 @@ public class AddCommandTest {
         AddCommand cmd = new AddCommand(p);
         cmd.setData(book, LAST_SHOWN_LIST);
         CommandResult res = cmd.execute();
-        
+
         assertFalse(res.getRelevantPersons().isPresent());
-        assertEquals(res.feedbackToUser, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertEquals(AddCommand.MESSAGE_DUPLICATE_PERSON, res.feedbackToUser);
         UniquePersonList people = book.getAllPersons();
         assertTrue(people.contains(p));
-        assertEquals(people.immutableListView().size(), 1);
+        assertEquals(1, people.immutableListView().size());
     }
-    
+
     private static Person generateTestPerson() {
         try {
             return new Person(new Name(Name.EXAMPLE), new Phone(Phone.EXAMPLE, false),
